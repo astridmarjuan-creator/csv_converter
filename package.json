@@ -1,0 +1,9 @@
+{
+  "name": "csv_converter",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Plain Text to LMS Quiz CSV Converter",
+  "scripts": {
+    "test": "node --test"
+  }
+}
