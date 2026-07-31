@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Plain Text → LMS Quiz CSV Converter</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="page">
+  <header class="page-header">
+    <h1>Plain Text → LMS Quiz CSV Converter</h1>
+    <p class="subtitle">Paste plain-text quiz questions, convert them, and download a CSV file ready for LMS import.</p>
+  </header>
+
+  <section class="instructions" aria-labelledby="instructions-heading">
+    <h2 id="instructions-heading">How to use this converter</h2>
+    <ol class="steps">
+      <li><strong>Fill in Course Code and Unit Number.</strong> These are required and are used to name your downloaded file (e.g. <code>CHEM110_Unit3_Quiz CSV.csv</code>).</li>
+      <li><strong>Paste your questions</strong> into the text box below. You can paste up to 30–40 questions at once, in any mix of the supported types.</li>
+      <li><strong>Click Convert.</strong> The app will parse and validate every question and show you a preview with a pass/fail summary.</li>
+      <li><strong>Review the results before downloading.</strong> Fix any errors shown in the preview and click Convert again — the Download button only becomes available once every question parses successfully.</li>
+    </ol>
+
+    <div class="callout">
+      <strong>Formatting tip:</strong> every question must end with a line that starts with <code>FEEDBACK:</code> (add your feedback text after the colon, or leave it blank). That line marks the end of one question and the start of the next, so a blank line between questions is recommended but not required.
+    </div>
+
+    <details class="format-spec">
+      <summary>Full plain text format spec (click to expand — all 6 question types)</summary>
+
+      <h3>Multiple Choice (MC)</h3>
+      <pre>MCQ question text
+A. Option 1
+B. Option 2
+C. Option 3
+D. Option 4
+ANSWER: D
+FEEDBACK:</pre>
+
+      <h3>Multiselect (MS)</h3>
+      <pre>Multiselect question text
+A. Option 1
+B. Option 2
+C. Option 3
+D. Option 4
+ANSWER: A, D
+FEEDBACK:</pre>
+
+      <h3>True/False (TF)</h3>
+      <pre>True or False: Question text
+ANSWER: TRUE
+FEEDBACK:</pre>
+
+      <h3>Short Answer (SA)</h3>
+      <pre>Short answer question text
+ANSWER: Answer text
+FEEDBACK:</pre>
+
+      <h3>Ordering (O)</h3>
+      <p>List items in the correct order, top to bottom.</p>
+      <pre>Ordering question text
+1. First item (correct position 1)
+2. Second item (correct position 2)
+3. Third item (correct position 3)
+FEEDBACK:</pre>
+
+      <h3>Matching (M)</h3>
+      <p>List lettered choices, then a <code>MATCH:</code> block pairing each item to the correct choice letter.</p>
+      <pre>Matching question text
+A. Choice 1 text
+B. Choice 2 text
+C. Choice 3 text
+MATCH:
+Item 1 text = B
+Item 2 text = A
+Item 3 text = C
+FEEDBACK:</pre>
+
+      <p class="note">The question type is detected automatically from the text pattern — you don't need to tag it yourself.</p>
+    </details>
+  </section>
+
+  <section class="form-section" aria-labelledby="form-heading">
+    <h2 id="form-heading">1–2. Enter details and paste your questions</h2>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="course-code">Course Code <span class="required">(required)</span></label>
+        <input type="text" id="course-code" placeholder="e.g. CHEM110" autocomplete="off" />
+        <p class="field-error" id="course-code-error" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="unit-number">Unit Number <span class="required">(required)</span></label>
+        <input type="text" id="unit-number" placeholder="e.g. Unit3" autocomplete="off" />
+        <p class="field-error" id="unit-number-error" role="alert"></p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="questions-text">Quiz Questions <span class="required">(required)</span></label>
+      <textarea id="questions-text" rows="16" placeholder="Paste your plain text quiz questions here..."></textarea>
+      <p class="field-error" id="questions-text-error" role="alert"></p>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="convert-btn" class="btn btn-primary">Convert</button>
+      <button type="button" id="download-btn" class="btn btn-secondary" disabled>Download CSV</button>
+    </div>
+    <p class="stale-notice" id="stale-notice" hidden>Input changed since the last conversion — click Convert again to refresh the preview.</p>
+  </section>
+
+  <section class="results-section" id="results-section" hidden aria-labelledby="results-heading">
+    <h2 id="results-heading">3–4. Review before downloading</h2>
+    <p class="summary" id="summary"></p>
+    <p class="download-policy" id="download-policy"></p>
+
+    <ul class="results-list" id="results-list"></ul>
+  </section>
+
+  <footer class="page-footer">
+    <p>No login required. Nothing you paste here is saved — the converter only runs in your browser.</p>
+  </footer>
+</div>
+
+<script src="parser.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
